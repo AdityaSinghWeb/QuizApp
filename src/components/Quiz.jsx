@@ -5,33 +5,18 @@ import QuesAns from "./QuesAns";
 
 function Quiz() {
   const [userAnswers, setUserAnswers] = useState([]);
-  const [answerState, setAnswerState] = useState("");
 
-  const activeQuestionIndex =
-    answerState === "" ? userAnswers.length : userAnswers.length - 1;
+  const activeQuestionIndex = userAnswers.length;
   const quizIsComplete = activeQuestionIndex === Questions.length;
 
   const handleSelectAnswer = useCallback(function handleSelectAnswer(
     selectedAnswer
   ) {
-    setAnswerState("answered");
-
     setUserAnswers((prevAnswer) => {
       return [...prevAnswer, selectedAnswer];
     });
-
-    setTimeout(() => {
-      if (Questions[activeQuestionIndex].answers[0] === selectedAnswer) {
-        setAnswerState("correct");
-      } else {
-        setAnswerState("wrong");
-      }
-      setTimeout(() => {
-        setAnswerState("");
-      }, 2000);
-    }, 1000);
   },
-  [activeQuestionIndex]); 
+  []);
 
   const handleSkipAnswer = useCallback(
     () => handleSelectAnswer(null),
@@ -51,11 +36,8 @@ function Quiz() {
     <div id="quiz">
       <QuesAns
         key={activeQuestionIndex}
-        questionText={Questions[activeQuestionIndex].text}
+        index={activeQuestionIndex}
         onSkipAnswer={handleSkipAnswer}
-        allAnswers={Questions[activeQuestionIndex].answers}
-        selectedAnswer={userAnswers[userAnswers.length - 1]}
-        answerStateFromQuiz={answerState}
         onSelectAnswer={handleSelectAnswer}
       />
     </div>
